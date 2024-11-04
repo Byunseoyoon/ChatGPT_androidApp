@@ -4,10 +4,12 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -45,6 +47,9 @@ public class Main2Activity extends AppCompatActivity implements TextToSpeech.OnI
     private static final String TAG = "SpeechRecognition";
     private static final String API_KEY = "";
 
+    // 음성 출력이 끝났을 때만 음성 인식을 다시 시작하도록
+    private boolean isSpeaking = false;
+
     // 시스템 메시지: 모델의 페르소나 설정
     JSONObject systemMessage = new JSONObject();
     // 대화 내역을 저장 할 리스트
@@ -72,6 +77,7 @@ public class Main2Activity extends AppCompatActivity implements TextToSpeech.OnI
             e.printStackTrace();
         }
 
+        //UI 설정
         LinearLayout mainLayout = new LinearLayout(this);
         mainLayout.setOrientation(LinearLayout.VERTICAL);
         mainLayout.setLayoutParams(new LinearLayout.LayoutParams(
@@ -93,8 +99,10 @@ public class Main2Activity extends AppCompatActivity implements TextToSpeech.OnI
         mainLayout.addView(scrollView);
         setContentView(mainLayout);
 
+        //TTS 초기화
         textToSpeech = new TextToSpeech(this, this);
 
+        // 음성 인식 권한 확인 및 요청
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, PERMISSION_REQUEST_CODE);
         } else {
@@ -163,16 +171,39 @@ public class Main2Activity extends AppCompatActivity implements TextToSpeech.OnI
             }
         });
 
-        startListening();
+        // textToSpeech 리스너 설정
+        textToSpeech.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+            @Override
+            public void onStart(String utteranceId) {
+                isSpeaking = true;
+            }
+
+            @Override
+            public void onDone(String utteranceId) {
+                isSpeaking = false;
+
+                // 일정시간 지연 후 음성인식 시작
+                new Handler(getMainLooper()).postDelayed(()->startListening(), 1000);
+            }
+
+            @Override
+            public void onError(String utteranceId) {
+                isSpeaking = false;
+                new Handler(getMainLooper()).postDelayed(()-> startListening(), 1000);
+            }
+        });
+
     }
 
     private void startListening() {
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-        intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
-        speechRecognizer.startListening(intent);
-        updateRecognitionText("음성 인식 시작...");
+        if(!isSpeaking) {
+            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+            intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
+            speechRecognizer.startListening(intent);
+            updateRecognitionText("음성 인식 시작...");
+        }
     }
 
     private void updateRecognitionText(String text) {
@@ -325,7 +356,7 @@ public class Main2Activity extends AppCompatActivity implements TextToSpeech.OnI
 
     private void speakText(String text) {
         if (textToSpeech != null) {
-            textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
+            textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, "TTS_OUTPUT");
         }
     }
 
