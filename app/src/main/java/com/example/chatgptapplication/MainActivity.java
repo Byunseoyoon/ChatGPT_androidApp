@@ -92,22 +92,22 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             // 음성 인식 액티비티 시작
-            //startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT);
+            startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT);
             // 음성 인식된 텍스트를 GPT에 전송
-            switch (i){
-                case 0:
-                    sendTextToGPT("안녕하십니까 제이름은 홍길동 입니다.");
-                    break;
-                case 1:
-                    sendTextToGPT("저는 개발자로 면접을 보러 오게된 누구 입니다~");
-                    break;
-                case 2:
-                    sendTextToGPT("제가 이 일을 하게 된 이유는");
-                    break;
-                case 3:
-                    sendTextToGPT("바로바로 돈 때문 입니다~");
-                    break;
-            }
+//            switch (i){
+//                case 0:
+//                    sendTextToGPT("안녕하십니까 제이름은 홍길동 입니다.");
+//                    break;
+//                case 1:
+//                    sendTextToGPT("저는 개발자로 면접을 보러 오게된 누구 입니다~");
+//                    break;
+//                case 2:
+//                    sendTextToGPT("제가 이 일을 하게 된 이유는");
+//                    break;
+//                case 3:
+//                    sendTextToGPT("바로바로 돈 때문 입니다~");
+//                    break;
+//            }
 
         } catch (Exception e) {
             e.printStackTrace();
