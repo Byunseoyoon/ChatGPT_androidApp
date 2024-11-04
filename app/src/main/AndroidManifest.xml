@@ -19,6 +19,9 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
+            android:name=".Example"
+            android:exported="false" />
+        <activity
             android:name=".Main2Activity"
             android:exported="true">
             <intent-filter>
