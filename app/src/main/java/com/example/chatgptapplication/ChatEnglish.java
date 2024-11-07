@@ -210,45 +210,6 @@ public class ChatEnglish extends AppCompatActivity implements TextToSpeech.OnIni
         updateRecognitionText("최근 인식된 텍스트:");
     }
 
-//    private class SendQuestionTask extends AsyncTask<String, Void, String> {
-//        @Override
-//        protected String doInBackground(String... params) {
-//            String question = params[0];
-//            String response = "";
-//            try {
-//                URL url = new URL(API_URL + question);
-//                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//                conn.setRequestMethod("GET");
-//
-//                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-//                StringBuilder stringBuilder = new StringBuilder();
-//                String line;
-//                while ((line = reader.readLine()) != null) {
-//                    stringBuilder.append(line);
-//                }
-//                reader.close();
-//                response = stringBuilder.toString();
-//            } catch (Exception e) {
-//                Log.e(TAG, "Error sending question to API", e);
-//            }
-//            return response;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(String result) {
-//            try {
-//                JSONObject jsonObject = new JSONObject(result);
-//                String apiResponse = jsonObject.getString("response");
-//                recognizedTextBuilder.insert(0, "API: " + apiResponse + "\n\n");
-//                updateRecognitionText("API 응답:");
-//                speakText(apiResponse);
-//            } catch (JSONException e) {
-//                Log.e(TAG, "Error parsing JSON", e);
-//                updateRecognitionText("JSON 파싱 오류: " + e.getMessage());
-//            }
-//        }
-//    }
-
     //GPT에 텍스트 전송 및 응답 받기
     private void sendTextToGPT(String text){
         OkHttpClient client = new OkHttpClient();
