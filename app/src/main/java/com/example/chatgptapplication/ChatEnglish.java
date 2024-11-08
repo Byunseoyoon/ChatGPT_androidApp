@@ -317,6 +317,7 @@ public class ChatEnglish extends AppCompatActivity implements TextToSpeech.OnIni
 
     private void speakText(String text) {
         if (textToSpeech != null) {
+            isSpeaking = true;
             textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, "TTS_OUTPUT");
         }
     }
