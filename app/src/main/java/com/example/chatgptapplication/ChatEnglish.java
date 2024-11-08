@@ -62,7 +62,7 @@ public class ChatEnglish extends AppCompatActivity implements TextToSpeech.OnIni
         // 시스템 메세지, 초기 페르 소나 설정
         try{
             systemMessage.put("role", "system");
-            systemMessage.put("content", "너는 나의 친절한 친구야 이건 대화하는 상황이고, 답변은 한두문장으로 간결하게 영어로 말해줘 ");
+            systemMessage.put("content", "You are my friendly English-speaking conversational partner. Please respond in English, keeping responses short and conversational.");
             conversationHistory.add(systemMessage);
             Log.d("conversationHistory", "onCreate: "+ systemMessage);
         }catch (JSONException e){
@@ -193,10 +193,13 @@ public class ChatEnglish extends AppCompatActivity implements TextToSpeech.OnIni
     private void startListening() {
         if(!isSpeaking) {
             Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.ENGLISH);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en");
+            intent.putExtra(RecognizerIntent.EXTRA_ONLY_RETURN_LANGUAGE_PREFERENCE, true);
             intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
             speechRecognizer.startListening(intent);
+
             updateRecognitionText("음성 인식 시작...");
         }
     }
