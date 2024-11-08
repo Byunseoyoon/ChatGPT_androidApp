@@ -38,7 +38,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class ChatEnglish extends AppCompatActivity implements TextToSpeech.OnInitListener {
+public class InterviewActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
     private SpeechRecognizer speechRecognizer;
     private TextToSpeech textToSpeech;
     private TextView recognitionTextView;
@@ -62,7 +62,7 @@ public class ChatEnglish extends AppCompatActivity implements TextToSpeech.OnIni
         // 시스템 메세지, 초기 페르 소나 설정
         try{
             systemMessage.put("role", "system");
-            systemMessage.put("content", "You are my friendly English-speaking conversational partner. Please respond in English, keeping responses short and conversational.");
+            systemMessage.put("content", "나는 면접 보러 온 사람이고, 너는 회사의 침착하고 분석적인 면접관이야 대신 답변또는 피드백을 요점만 정확히 간결하게 말해줘 ");
             conversationHistory.add(systemMessage);
             Log.d("conversationHistory", "onCreate: "+ systemMessage);
         }catch (JSONException e){
@@ -95,7 +95,7 @@ public class ChatEnglish extends AppCompatActivity implements TextToSpeech.OnIni
         textToSpeech = new TextToSpeech(this, this);
 
         // 음성 인식 권한 확인 및 요청
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, PERMISSION_REQUEST_CODE);
         } else {
             initializeSpeechRecognizer();
@@ -187,19 +187,15 @@ public class ChatEnglish extends AppCompatActivity implements TextToSpeech.OnIni
         });
 
         startListening();
-        sendTextToGPT("Hello");
     }
 
     private void startListening() {
         if(!isSpeaking) {
             Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.ENGLISH);
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en");
-            intent.putExtra(RecognizerIntent.EXTRA_ONLY_RETURN_LANGUAGE_PREFERENCE, true);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
             intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
             speechRecognizer.startListening(intent);
-
             updateRecognitionText("음성 인식 시작...");
         }
     }
@@ -329,7 +325,7 @@ public class ChatEnglish extends AppCompatActivity implements TextToSpeech.OnIni
     @Override
     public void onInit(int status) {
         if (status == TextToSpeech.SUCCESS) {
-            int result = textToSpeech.setLanguage(Locale.ENGLISH);
+            int result = textToSpeech.setLanguage(Locale.getDefault());
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 Log.e(TAG, "Language not supported");
             }
@@ -360,4 +356,3 @@ public class ChatEnglish extends AppCompatActivity implements TextToSpeech.OnIni
         }
     }
 }
-
