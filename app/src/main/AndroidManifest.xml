@@ -7,6 +7,17 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" android:required="true" />
 
+    <!-- 스토리지 권한 추가 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="29"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="29"/>
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+
+    <!-- 오디오 녹음 기능 명시 -->
+    <uses-feature android:name="android.hardware.microphone" android:required="true" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -17,9 +28,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ChatGPTApplication"
         tools:targetApi="31">
-        <activity
-            android:name=".ChatEnglishActivity"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".ChatEnglishActivity"-->
+<!--            android:exported="false" />-->
         <!--
                <activity
             android:name=".MainActivity"
@@ -28,15 +39,25 @@
             android:name=".Example"
             android:exported="false" />
         -->
-        <activity
-            android:name=".SquatCountActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+<!--        <activity-->
+<!--            android:name=".SquatCountActivity"-->
+<!--            android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
+
+        <activity
+        android:name=".SpeechRecognizer"
+        android:exported="true">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
     </application>
 
 </manifest>
